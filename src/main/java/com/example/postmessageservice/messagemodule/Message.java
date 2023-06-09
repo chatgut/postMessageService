@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "messages")
 public class Message {
 
-
     @Id
     private String id;
 
@@ -21,7 +20,9 @@ public class Message {
 
     private String dateAndTime;
 
-    public Message() {}
+//    public Message() {
+//    }
+
     public Message(String id, String sendersUsername, String receiversUsername, String message, String dateAndTime) {
         this.id = id;
         this.sendersUsername = sendersUsername;
@@ -29,6 +30,7 @@ public class Message {
         this.message = message;
         this.dateAndTime = dateAndTime;
     }
+
     @Override
     public String toString() {
         return "Message{" +
