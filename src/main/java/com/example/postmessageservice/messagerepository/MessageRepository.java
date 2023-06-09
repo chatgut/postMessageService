@@ -16,10 +16,8 @@ public interface MessageRepository extends MongoRepository<Message,String> {
 
     @Query("""
             {
-
             "sendersUsername": { "$in":[ ?0, ?1 ] },
-            "receiversUsername": { "$in": [ ?1, ?0]}
-
+            "receiversUsername": { "$in": [ ?1, ?0] }
             }
             """)
     Page<Message> findMessages(
