@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 
 public interface MessageRepository extends MongoRepository<Message,String> {
 
-    //Page<Message> findByFromUsernameAndToUsername(String sendersUsername,String receiversUsername,Pageable pageable);
-
     @Query("""
             {
             "sendersUsername": { "$in":[ ?0, ?1 ] },

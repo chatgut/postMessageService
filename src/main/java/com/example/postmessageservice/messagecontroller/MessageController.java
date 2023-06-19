@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 @RestController
 @RequestMapping("/")
+@CrossOrigin
 public class MessageController {
 
     private final MessageRepository repository;
@@ -28,7 +29,7 @@ public class MessageController {
 
 
     @GetMapping("/posts")
-    public List<com.example.postmessageservice.messagemodule.Message> getMessages(@RequestHeader("userID") String sendersUsername,
+    public List<Message> getMessages(@RequestHeader("userID") String sendersUsername,
                                                                                   @RequestParam String receiversUsername,
                                                                                   @RequestParam(defaultValue = "0") int page,
                                                                                   @RequestParam(defaultValue = "10") int nMessages) {
