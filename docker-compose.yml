@@ -1,0 +1,115 @@
+#version: '3'
+#
+#services:
+#
+#  mongo:
+#    container_name: mongodb
+#    image: mongo
+#    ports:
+#      - '5050:80'
+#    volumes:
+#      - mongodb:/data/mongodb
+#    networks:
+#      - postgres
+#    restart: unless-stopped
+#
+#  postgres:
+#    container_name: postgres
+#    image: postgres
+##    environment:
+##      POSTGRES_USERS: mymongodb
+##      POSTGRES_PASSWORD: password
+##      PGDATA: /data/postgres
+#    volumes:
+#      - postgres:/data/postgres
+#
+#    ports:
+#      - "5432:5432"
+#    networks:
+#      - postgres
+#    restart: unless-stopped
+#
+#networks:
+#  postgres:
+#    driver: bridge
+#
+#volumes:
+#  postgres:
+#  mongodb:
+
+#
+#version: '3'
+#
+#services:
+#  mongo:
+#    image: 'mongo:3.4.1'
+#    ports:
+#      - '27017:27017'
+#    volumes:
+#      - 'mongo:/data/db'
+#
+#  puma:
+#    tty: true
+#    stdin_open: true
+#    depends_on:
+#      - 'mongo'
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.puma
+#    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+#    ports:
+#      - '3000:3000'
+#    volumes:
+#      - '.:/app'
+#    environment:
+#      - SECRET_KEY_BASE=secret
+#      - MONGO_URL=mongodb://mongo:27017/app_development
+#volumes:
+#  mongo:
+#  As you might have noticed, you can connect to mongo service running on mongo container from other containers located in the same docker-compose.yml file using the connection string like mongodb://mongo:27017.
+#
+#  In case you want to connect from the host, you can use mongodb://localhost:27017 if you have exposed mongo port as shown above.
+
+
+
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USERS: stevenCodes
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    volumes:
+      -postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin
+    image: webpage/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      -pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      -postgres
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
+
+

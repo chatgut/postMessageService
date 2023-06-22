@@ -13,6 +13,8 @@ spec:
   selector:
     app: postgresql
   type: NodePort
+status:
+    loadBalancer: { }
 ---
 apiVersion: apps/v1
 kind: StatefulSet # Kubernetes' resource kind we are creating
@@ -25,6 +27,7 @@ spec:
   selector:
     matchLabels:
       app: postgresql
+  serviceName: "postgres"
   replicas: 1 # Number of replicas that will be created for this deployment
   template:
     metadata:
@@ -64,14 +67,26 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5432 # The port that the container is running on in the cluster
-  serviceName: mongodb
+#---
+##apiVersion: v1
+##kind: Service
+##metadata:
+##  name: mymongo
+##  namespace: default
+##spec:
+##  selector:
+##    app.kubernetes.io/name: mymongo
+##  ports:
+##    - protocol: TCP
+##      port: 27017
+##      targetPort: 27017
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mymongo
+  name: stevescode
 spec:
-  serviceName: mymongo
+  serviceName: stevescode
   replicas: 1
   selector:
     matchLabels:
@@ -80,21 +95,34 @@ spec:
     metadata:
       labels:
         app: database
-        selector: mymongo
+        selector: stevescode
     spec:
       containers:
-        - name: mymongo
+        - name: stevescode
           image: mongo:latest
 ---
-
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  labels:
+#    app: mymongo
+#  name: mymongo
+#spec:
+#  ports:
+#    - port: 27017
+#      protocol: TCP
+#      targetPort: 27017
+#      nodePort: 32000
+#  selector:
+#    app: mymongo
+#  type: NodePort
 apiVersion: v1
 kind: Service
 metadata:
-  name: mymongo
+  name: stevescode
   labels:
     app: database
 spec:
   clusterIP: None
   selector:
     app: database
-

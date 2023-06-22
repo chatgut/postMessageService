@@ -12,15 +12,23 @@ import org.springframework.stereotype.Service;
 
 public interface MessageRepository extends MongoRepository<Message,String> {
 
+    Page<Message> findBySendersUsernameEqualsIgnoreCaseAndReceiversUsernameEqualsIgnoreCase(
+            String sendersUsername,
+            String receiversUsername,
+            Pageable pageable);
+
     @Query("""
             {
             "sendersUsername": { "$in":[ ?0, ?1 ] },
             "receiversUsername": { "$in": [ ?1, ?0] }
             }
-            """)
+            """
+    )
     Page<Message> findMessages(
             @Param("sendersUsername") String sendersUsername,
             @Param("receiversUsername") String receiversUsername,
             Pageable pageable);
+
+
 
 }
