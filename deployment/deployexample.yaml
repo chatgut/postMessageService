@@ -1,36 +1,38 @@
+
+
 apiVersion: v1 # Kubernetes API version
 kind: Service # Kubernetes' resource kind we are creating
 metadata: # Metadata of the resource kind we are creating
-  name: postms
+  name: postmessageservice-service
   namespace: default
   labels:
-    app: postms
-    service: postms
+    app: postmessageservice
+    service: postmessageservice
 spec:
   selector:
-    app: postms
+    app: postmessageservice
   ports:
     - name: http
       port: 8000 # The port that the service is running on in the cluster
       targetPort: 8000 # The port exposed by the service
-  clusterIP: None
+  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment # Kubernetes' resource kind we are creating
 metadata:
-  name: postms
+  name: postmessageservice-app
   namespace: default
   labels:
-    app: postms
+    app: postmessageservice
 spec:
   selector:
     matchLabels:
-      app: postms
+      app: postmessageservice
   replicas: 1 # Number of replicas that will be created for this deployment
   template:
     metadata:
       labels:
-        app: postms
+        app: postmessageservice
     spec:
       serviceAccountName: default # configmap-reader-account
       containers:
@@ -40,50 +42,33 @@ spec:
               cpu: "200m"
             limits:
               memory: "400Mi"
-          name: postms
-          image: osedummesteven/postms # Image that will be used to containers in the cluster
-          env:
-            - name: DB_URL
-              value: mongodb://localhost:27017/?retryWrites=true&w=majority&maxIdleTimeMS=60000
-              # retryWrites=true&w=majority&
-          #          livenessProbe:
-          #            failureThreshold: 3
-          #            httpGet:
-          #              path: /livez
-          #              port: 8080
-          #            periodSeconds: 10
-          #          readinessProbe:
-          #            failureThreshold: 3
-          #            httpGet:
-          #              path: /readyz
-          #              port: 8080
-          #            initialDelaySeconds: 10
-          #            periodSeconds: 10
-          imagePullPolicy: Always
+          name: postmessageservice
+          image: webservicelab:v.2 # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000 # The port that the container is running on in the cluster
 ---
 apiVersion: v1 # Kubernetes API version
 kind: Service # Kubernetes' resource kind we are creating
 metadata: # Metadata of the resource kind we are creating
-  name: nginx-service
+  name: nginx
   namespace: default
   labels:
     app: nginx
     service: nginx
 spec:
   selector:
-    app.kubernetes.io/name: nginx
+    app: nginx
   ports:
     - name: http
       port: 8003 # The port that the service is running on in the cluster
       targetPort: 8003 # The port exposed by the service
-  clusterIP: None
+  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment # Kubernetes' resource kind we are creating
 metadata:
-  name: nginx-deployment
+  name: nginx
   namespace: default
   labels:
     app: nginx
@@ -94,7 +79,6 @@ spec:
   replicas: 1 # Number of replicas that will be created for this deployment
   template:
     metadata:
-      name: nginx-template
       labels:
         app: nginx
     spec:
@@ -108,94 +92,6 @@ spec:
               memory: "400Mi"
           name: nginx
           image: nginx:latest # Image that will be used to containers in the cluster
-            #          env:
-            #            - name: DB_URL
-            #              value: mongodb://mymongo:27017/mydbone?retryWrites=true&w=majority&maxIdleTimeMS=60000
-          # retryWrites=true&w=majority&
-          #          livenessProbe:
-          #            failureThreshold: 3
-          #            httpGet:
-          #              path: /livez
-          #              port: 8080
-          #            periodSeconds: 10
-          #          readinessProbe:
-          #            failureThreshold: 3
-          #            httpGet:
-          #              path: /readyz
-          #              port: 8080
-          #            initialDelaySeconds: 10
-          #            periodSeconds: 10
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8003 # The port that the container is running on in the cluster
-      restartPolicy: Always
----
-apiVersion: v1 # Kubernetes API version
-kind: Service # Kubernetes' resource kind we are creating
-metadata: # Metadata of the resource kind we are creating
-  name: authservice
-  namespace: default
-  labels:
-    app: authservice
-    service: authservice
-spec:
-  selector:
-    app: authservice
-  ports:
-    - name: http
-      port: 8001 # The port that the service is running on in the cluster
-      targetPort: 8001 # The port exposed by the service
-  clusterIP: None
----
-apiVersion: apps/v1
-kind: Deployment # Kubernetes' resource kind we are creating
-metadata:
-  name: authservice
-  namespace: default
-  labels:
-    app: authservice
-spec:
-  selector:
-    matchLabels:
-      app: authservice
-  replicas: 1 # Number of replicas that will be created for this deployment
-  template:
-    metadata:
-      labels:
-        app: authservice
-    spec:
-      serviceAccountName: default # configmap-reader-account
-      containers:
-        - resources:
-            requests:
-              memory: "200Mi"
-              cpu: "200m"
-            limits:
-              memory: "400Mi"
-          name: authservice
-          image: authservice:latest # Image that will be used to containers in the cluster
-          env:
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://postgresql:5432/postgres
-            - name: SPRING_DATASOURCE_USERNAME
-              value: postgres
-            - name: SPRING_DATASOURCE_PASSWORD
-              value: password
-            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
-              value: update
-          #          livenessProbe:
-          #            failureThreshold: 3
-          #            httpGet:
-          #              path: /livez
-          #              port: 8080
-          #            periodSeconds: 10
-          #          readinessProbe:
-          #            failureThreshold: 3
-          #            httpGet:
-          #              path: /readyz
-          #              port: 8080
-          #            initialDelaySeconds: 10
-          #            periodSeconds: 10
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 8001 # The port that the container is running on in the cluster

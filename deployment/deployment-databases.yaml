@@ -7,8 +7,8 @@ metadata:
 spec:
   ports:
     - port: 5432
-      protocol: TCP
       targetPort: 5432
+      protocol: TCP
       nodePort: 32001
   selector:
     app: postgresql
@@ -27,7 +27,6 @@ spec:
   selector:
     matchLabels:
       app: postgresql
-  serviceName: "postgres"
   replicas: 1 # Number of replicas that will be created for this deployment
   template:
     metadata:
@@ -51,42 +50,28 @@ spec:
               value: postgres
             - name: POSTGRES_DB
               value: postgres
-          #          livenessProbe:
-          #            failureThreshold: 3
-          #            httpGet:
-          #              path: /livez
-          #              port: 8080
-          #            periodSeconds: 10
-          #          readinessProbe:
-          #            failureThreshold: 3
-          #            httpGet:
-          #              path: /readyz
-          #              port: 8080
-          #            initialDelaySeconds: 10
-          #            periodSeconds: 10
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5432 # The port that the container is running on in the cluster
-#---
-##apiVersion: v1
-##kind: Service
-##metadata:
-##  name: mymongo
-##  namespace: default
-##spec:
-##  selector:
-##    app.kubernetes.io/name: mymongo
-##  ports:
-##    - protocol: TCP
-##      port: 27017
-##      targetPort: 27017
+  serviceName: postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stevemongo
+  labels:
+    app: database
+spec:
+  clusterIP: None
+  selector:
+    app: database
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: stevescode
+  name: stevemongo
 spec:
-  serviceName: stevescode
+  serviceName: stevemongo
   replicas: 1
   selector:
     matchLabels:
@@ -95,34 +80,11 @@ spec:
     metadata:
       labels:
         app: database
-        selector: stevescode
+        selector: stevemongo
     spec:
       containers:
-        - name: stevescode
+        - name: stevemongo
           image: mongo:latest
----
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  labels:
-#    app: mymongo
-#  name: mymongo
-#spec:
-#  ports:
-#    - port: 27017
-#      protocol: TCP
-#      targetPort: 27017
-#      nodePort: 32000
-#  selector:
-#    app: mymongo
-#  type: NodePort
-apiVersion: v1
-kind: Service
-metadata:
-  name: stevescode
-  labels:
-    app: database
-spec:
-  clusterIP: None
-  selector:
-    app: database
+
+
+
