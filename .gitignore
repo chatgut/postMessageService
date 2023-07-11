@@ -31,3 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
+/out/artifacts/postMessageService_Web_exploded/postMessageService_Web exploded.war

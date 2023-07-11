@@ -12,7 +12,7 @@
     <artifactId>postMessageService</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>postMessageService</name>
-    <description>postMessageService</description>
+    <description>Message Service</description>
     <properties>
         <java.version>20</java.version>
     </properties>
