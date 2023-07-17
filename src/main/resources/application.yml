@@ -1,0 +1,15 @@
+#spring:
+#  application:
+#    name: postmessageservice
+#  datasource:
+#    username: 'steveCode'
+#    url: jdbc:postgresql://localhost:5432/postmessageservice
+#    password: 'password'
+#    jpa:
+#      properties:
+#        hibernate:
+#          dialect: org.hibernate.dialect.PostgreSQLDialect
+#          format_sql: 'true'
+#      hibernate:
+#        ddl-auto: update
+#        show-sql: 'true'

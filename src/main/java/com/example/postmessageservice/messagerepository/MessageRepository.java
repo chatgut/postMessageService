@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MessageRepository extends MongoRepository<Message,String> {
 
+
     Page<Message> findBySendersUsernameEqualsIgnoreCaseAndReceiversUsernameEqualsIgnoreCase(
             String sendersUsername,
             String receiversUsername,

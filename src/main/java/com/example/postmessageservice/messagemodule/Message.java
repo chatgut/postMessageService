@@ -1,12 +1,8 @@
 package com.example.postmessageservice.messagemodule;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-@Setter
 @Document(collection = "messages")
 public class Message {
 
@@ -20,13 +16,19 @@ public class Message {
 
     private String dateAndTime;
 
-
+    public Message() {
+    }
 
     public Message(String id, String sendersUsername, String receiversUsername, String message, String dateAndTime) {
         this.id = id;
         this.sendersUsername = sendersUsername;
         this.receiversUsername = receiversUsername;
         this.message = message;
+        this.dateAndTime = dateAndTime;
+    }
+
+
+    public void setDateAndTime(String dateAndTime) {
         this.dateAndTime = dateAndTime;
     }
 

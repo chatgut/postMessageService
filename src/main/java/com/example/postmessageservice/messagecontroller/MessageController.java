@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 @RestController
 @RequestMapping("/")
-@CrossOrigin
 public class MessageController {
 
     private final MessageRepository repository;
