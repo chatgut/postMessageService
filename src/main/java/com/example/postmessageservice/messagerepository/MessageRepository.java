@@ -9,7 +9,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MessageRepository extends MongoRepository<Message,String> {
+public interface MessageRepository extends MongoRepository<Message, String> {
+
 
 
     Page<Message> findBySendersUsernameEqualsIgnoreCaseAndReceiversUsernameEqualsIgnoreCase(
@@ -17,18 +18,19 @@ public interface MessageRepository extends MongoRepository<Message,String> {
             String receiversUsername,
             Pageable pageable);
 
+
     @Query("""
             {
-            "sendersUsername": { "$in":[ ?0, ?1 ] },
-            "receiversUsername": { "$in": [ ?1, ?0] }
+            "sendersUsername": { "$in": [?0,?1] },
+            "receiversUsername": { "$in": [ ?1,?0]}
             }
             """
     )
-    Page<Message> findMessages(
-            @Param("sendersUsername") String sendersUsername,
-            @Param("receiversUsername") String receiversUsername,
-            Pageable pageable);
+
+
+    Page<Message> findMessages(@Param("sendersUsername") String sendersUsername, @Param("receiversUsername") String receiversUsername, Pageable pageable);
 
 
 
 }
+

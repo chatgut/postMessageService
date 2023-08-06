@@ -1,9 +1,15 @@
 package com.example.postmessageservice.messagemodule;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "messages")
+@Data
+//@Document(collection = "message")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Document(collection = "Message")
+
 public class Message {
 
     @Id
@@ -16,21 +22,8 @@ public class Message {
 
     private String dateAndTime;
 
-    public Message() {
-    }
+    public Message() {}
 
-    public Message(String id, String sendersUsername, String receiversUsername, String message, String dateAndTime) {
-        this.id = id;
-        this.sendersUsername = sendersUsername;
-        this.receiversUsername = receiversUsername;
-        this.message = message;
-        this.dateAndTime = dateAndTime;
-    }
-
-
-    public void setDateAndTime(String dateAndTime) {
-        this.dateAndTime = dateAndTime;
-    }
 
     @Override
     public String toString() {
@@ -42,4 +35,14 @@ public class Message {
                 ", dateAndTime='" + dateAndTime + '\'' +
                 '}';
     }
+
+//    public Message(String id, String sendersUsername, String receiversUsername, String message, String dateAndTime) {
+//        this.id = id;
+//        this.sendersUsername = sendersUsername;
+//        this.receiversUsername = receiversUsername;
+//        this.message = message;
+//        this.dateAndTime = dateAndTime;
+//    }
+
 }
+

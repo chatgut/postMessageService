@@ -1,47 +1,81 @@
-version: '3'
+version: "3.8"
 
 services:
-  postgres:
-    container_name: postgres
-    image: postgres
-    environment:
-      POSTGRES_USERS: stevenCodes
-      POSTGRES_PASSWORD: password
-      PGDATA: /data/postgres
-    volumes:
-      - postgres:/data/postgres
-    ports:
-      - "5432:5432"
-    networks:
-      - postgres
-    restart: unless-stopped
-
-
-
-
-
-  pgadmin:
-    container_name: pgadmin4
+  mongoDB:
     image: mongo
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    volumes:
-      - pgadmin:/var/lib/pgadmin
+    container_name: mongodb
     ports:
-      - "5050:80"
-    networks:
-      - postgres
-    restart: unless-stopped
+      - 27017:27017
+    volumes:
+      - data:/data
 
-networks:
-  postgres:
-    driver: bridge
+#  mongodb-compass:
+#    image: mongodb-compass
+#    container_name: mongodb-compass
+#    restart: always
+#    ports:
+#      - 8081:8081
+#    environment:
+#        - ME_CONFIG_MONGODB_SERVER=mongodb
+
 
 volumes:
-  postgres:
-  pgadmin:
+  data: {}
+
+networks:
+  default:
+    name: mongodb_network
+
+
+#  postgres:
+#    container_name: postgres
+#    image: postgres
+#    environment:
+#      POSTGRES_USERS: stevenCodes
+#      POSTGRES_PASSWORD: password
+#      PGDATA: /data/postgres
+#    volumes:
+#      - postgres:/data/postgres
+#    ports:
+#      - "5432:5432"
+#    networks:
+#      - postgres
+#    restart: unless-stopped
+#
+#
+#
+#
+
+#  pgadmin:
+#    container_name: pgadmin4
+#    image: mongo
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4}
+#      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+#      PGADMIN_CONFIG_SERVER_MODE: 'False'
+#    volumes:
+#      - pgadmin:/var/lib/pgadmin
+#    ports:
+#      - "5050:80"
+#    networks:
+#      - postgres
+#    restart: unless-stopped
+
+#networks:
+#    postgres:
+#      driver: bridge
+#
+#volumes:
+#    postgres:
+#    pgadmin:
+
+
+
+
+
+
+
+
 
 
 

@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 //@ComponentScan("com.example.postmessageservice.messagerepository")
 @SpringBootApplication
+//@EnableSwagger2
 public class PostMessageServiceApplication {
 
     public static void main(String[] args) {

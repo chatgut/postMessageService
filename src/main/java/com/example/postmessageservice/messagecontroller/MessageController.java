@@ -1,7 +1,10 @@
+
+
 package com.example.postmessageservice.messagecontroller;
 
 import com.example.postmessageservice.messagemodule.Message;
-import com.example.postmessageservice.messagerepository.MessageRepository;
+import com.example.postmessageservice.messageservice.MessageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -9,33 +12,38 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 @RestController
 @RequestMapping("/")
+@CrossOrigin
 public class MessageController {
 
-    private final MessageRepository repository;
+    @Autowired
+    private final MessageService messageService;
 
-
-    public MessageController(MessageRepository repository) {
-        this.repository = repository;
+    public MessageController(MessageService messageService) {
+        this.messageService = messageService;
     }
 
-    @PostMapping("/posts")
+
+
+    @PostMapping("/post")
     public Message createMessage(@RequestBody Message message) {
         message.setDateAndTime(LocalDateTime.now().toString());
-        return repository.save(message);
+        return messageService.createMessage(message);
     }
 
 
-    @GetMapping("/posts")
-    public List<Message> getMessages(@RequestHeader("userID") String sendersUsername,
-                                                                                  @RequestParam String receiversUsername,
-                                                                                  @RequestParam(defaultValue = "0") int page,
-                                                                                  @RequestParam(defaultValue = "10") int nMessages) {
-        Pageable paging = PageRequest.of(page, nMessages, Sort.by("dateAndTime").descending());
+    @GetMapping("posts")
+    public List<Message> getSendersOutbox(@RequestHeader("userID") String sendersUsername,
+                                          @RequestParam String receiversUsername,
+                                          @RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "10") int nMessages) {
+        Pageable pageable = PageRequest.of(page, nMessages, Sort.by("dateAndTime").descending());
 
 
-        return repository.findMessages(sendersUsername, receiversUsername, paging).getContent();
+        return messageService.getSendersOutbox(sendersUsername, receiversUsername, pageable);
     }
 
 }
+
