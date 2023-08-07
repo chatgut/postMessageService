@@ -6,8 +6,6 @@ RUN mvn clean package
 
 FROM eclipse-temurin:20.0.1_9-jre-jammy
 COPY --from=build /app/target/*.jar /app/postmessageservice.jar
-#ENV PORT 8000
-#EXPOSE 8000
 
 ENTRYPOINT ["java","-jar","/app/postmessageservice.jar"]
 
