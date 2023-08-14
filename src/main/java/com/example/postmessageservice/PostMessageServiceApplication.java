@@ -10,7 +10,7 @@ public class PostMessageServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(PostMessageServiceApplication.class, args);
-        System.out.println("Hello PMS");
+//        System.out.println("Hello PMS");
 
     }
 

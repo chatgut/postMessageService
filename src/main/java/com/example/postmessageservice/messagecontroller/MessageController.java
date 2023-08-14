@@ -5,45 +5,43 @@ package com.example.postmessageservice.messagecontroller;
 import com.example.postmessageservice.messagemodule.Message;
 import com.example.postmessageservice.messageservice.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 @RestController
-@RequestMapping("/")
-@CrossOrigin
+@RequestMapping("/api")
+//@CrossOrigin
 public class MessageController {
 
+
+
     @Autowired
-    private final MessageService messageService;
-
-    public MessageController(MessageService messageService) {
-        this.messageService = messageService;
-    }
-
+    private MessageService messageService;
 
 
     @PostMapping("/post")
-    public Message createMessage(@RequestBody Message message) {
+    public String save(@RequestBody Message message) {
         message.setDateAndTime(LocalDateTime.now().toString());
-        return messageService.createMessage(message);
+
+        return messageService.save(message).getId();
     }
 
 
-    @GetMapping("posts")
-    public List<Message> getSendersOutbox(@RequestHeader("userID") String sendersUsername,
-                                          @RequestParam String receiversUsername,
-                                          @RequestParam(defaultValue = "0") int page,
-                                          @RequestParam(defaultValue = "10") int nMessages) {
-        Pageable pageable = PageRequest.of(page, nMessages, Sort.by("dateAndTime").descending());
+    @GetMapping("/inbox")
+    public Page<Message> inboxMessage(@RequestHeader String sendersUsername,
+                                      @RequestParam String receiversUsername,
+                                      @RequestParam(defaultValue = "0") Integer page,
+                                      @RequestParam(defaultValue = "5")Integer size) {
+        //                  PageRequest.of(page, size)
+        Pageable pageable = PageRequest.of(page, size, Sort.by("dateAndTime").descending());
 
-
-        return messageService.getSendersOutbox(sendersUsername, receiversUsername, pageable);
+            return messageService.search(sendersUsername, receiversUsername, pageable);
     }
-
 }
 
