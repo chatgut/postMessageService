@@ -1,97 +1,97 @@
 
-#
-#apiVersion: v1 # Kubernetes API version
-#kind: Service # Kubernetes' resource kind we are creating
-#metadata: # Metadata of the resource kind we are creating
-#  name: postmessageservice-service
-#  namespace: default
-#  labels:
-#    app: postmessageservice
-#    service: postmessageservice
-#spec:
-#  selector:
-#    app: postmessageservice
-#  ports:
-#    - name: http
-#      port: 8000 # The port that the service is running on in the cluster
-#      targetPort: 8000 # The port exposed by the service
-#  type: LoadBalancer
-#---
-#apiVersion: apps/v1
-#kind: Deployment # Kubernetes' resource kind we are creating
-#metadata:
-#  name: postmessageservice-app
-#  namespace: default
-#  labels:
-#    app: postmessageservice
-#spec:
-#  selector:
-#    matchLabels:
-#      app: postmessageservice
-#  replicas: 1 # Number of replicas that will be created for this deployment
-#  template:
-#    metadata:
-#      labels:
-#        app: postmessageservice
-#    spec:
-#      serviceAccountName: default # configmap-reader-account
-#      containers:
-#        - resources:
-#            requests:
-#              memory: "200Mi"
-#              cpu: "200m"
-#            limits:
-#              memory: "400Mi"
-#          name: postmessageservice
-#          image: webservicelab:v.2 # Image that will be used to containers in the cluster
-#          imagePullPolicy: IfNotPresent
-#          ports:
-#            - containerPort: 8000 # The port that the container is running on in the cluster
-#---
-#apiVersion: v1 # Kubernetes API version
-#kind: Service # Kubernetes' resource kind we are creating
-#metadata: # Metadata of the resource kind we are creating
-#  name: nginx
-#  namespace: default
-#  labels:
-#    app: nginx
-#    service: nginx
-#spec:
-#  selector:
-#    app: nginx
-#  ports:
-#    - name: http
-#      port: 8003 # The port that the service is running on in the cluster
-#      targetPort: 8003 # The port exposed by the service
-#  type: LoadBalancer
-#---
-#apiVersion: apps/v1
-#kind: Deployment # Kubernetes' resource kind we are creating
-#metadata:
-#  name: nginx
-#  namespace: default
-#  labels:
-#    app: nginx
-#spec:
-#  selector:
-#    matchLabels:
-#      app: nginx
-#  replicas: 1 # Number of replicas that will be created for this deployment
-#  template:
-#    metadata:
-#      labels:
-#        app: nginx
-#    spec:
-#      serviceAccountName: default # configmap-reader-account
-#      containers:
-#        - resources:
-#            requests:
-#              memory: "200Mi"
-#              cpu: "200m"
-#            limits:
-#              memory: "400Mi"
-#          name: nginx
-#          image: nginx:latest # Image that will be used to containers in the cluster
-#          imagePullPolicy: IfNotPresent
-#          ports:
-#            - containerPort: 8003 # The port that the container is running on in the cluster
+
+apiVersion: v1 # Kubernetes API version
+kind: Service # Kubernetes' resource kind we are creating
+metadata: # Metadata of the resource kind we are creating
+  name: postmessageservice-service
+  namespace: default
+  labels:
+    app: postmessageservice
+    service: postmessageservice
+spec:
+  selector:
+    app: postmessageservice
+  ports:
+    - name: http
+      port: 80 # The port that the service is running on in the cluster
+      targetPort: 8080 # The port exposed by the service
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment # Kubernetes' resource kind we are creating
+metadata:
+  name: postmessageservice-app
+  namespace: default
+  labels:
+    app: postmessageservice
+spec:
+  selector:
+    matchLabels:
+      app: postmessageservice
+  replicas: 1 # Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: postmessageservice
+    spec:
+      serviceAccountName: default # configmap-reader-account
+      containers:
+        - resources:
+            requests:
+              memory: "200Mi"
+              cpu: "200m"
+            limits:
+              memory: "400Mi"
+          name: postmessageservice
+          image: postmessageservice # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080 # The port that the container is running on in the cluster
+---
+apiVersion: v1 # Kubernetes API version
+kind: Service # Kubernetes' resource kind we are creating
+metadata: # Metadata of the resource kind we are creating
+  name: nginx
+  namespace: default
+  labels:
+    app: nginx
+    service: nginx
+spec:
+  selector:
+    app: nginx
+  ports:
+    - name: http
+      port: 80 # The port that the service is running on in the cluster
+      targetPort: 8003 # The port exposed by the service
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment # Kubernetes' resource kind we are creating
+metadata:
+  name: nginx
+  namespace: default
+  labels:
+    app: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 1 # Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      serviceAccountName: default # configmap-reader-account
+      containers:
+        - resources:
+            requests:
+              memory: "200Mi"
+              cpu: "200m"
+            limits:
+              memory: "400Mi"
+          name: nginx
+          image: nginx:latest # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8003 # The port that the container is running on in the cluster

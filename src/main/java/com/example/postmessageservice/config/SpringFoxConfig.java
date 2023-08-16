@@ -1,4 +1,4 @@
-package com.example.postmessageservice.config;
+//package com.example.postmessageservice.config;
 
 //@Configuration
 //public class SpringFoxConfig {

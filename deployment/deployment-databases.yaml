@@ -1,88 +1,91 @@
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  labels:
-#    app: postgresql
-#  name: postgresql
-#spec:
-#  ports:
-#    - port: 5432
-#      targetPort: 5432
-#      protocol: TCP
-#      nodePort: 32001
-#  selector:
-#    app: postgresql
-#  type: NodePort
-#---
-#apiVersion: apps/v1
-#kind: StatefulSet # Kubernetes' resource kind we are creating
-#metadata:
-#  name: postgresql
-#  namespace: default
-#  labels:
-#    app: postgresql
-#spec:
-#  selector:
-#    matchLabels:
-#      app: postgresql
-#  replicas: 1 # Number of replicas that will be created for this deployment
-#  template:
-#    metadata:
-#      labels:
-#        app: postgresql
-#    spec:
-#      serviceAccountName: default # configmap-reader-account
-#      containers:
-#        - resources:
-#            requests:
-#              memory: "200Mi"
-#              cpu: "200m"
-#            limits:
-#              memory: "400Mi"
-#          name: postgresql
-#          image: postgres # Image that will be used to containers in the cluster
-#          env:
-#            - name: POSTGRES_PASSWORD
-#              value: Matthew#2007
-#            - name: POSTGRES_USER
-#              value: postgres
-#            - name: POSTGRES_DB
-#              value: postgres
-#          imagePullPolicy: IfNotPresent
-#          ports:
-#            - containerPort: 5432 # The port that the container is running on in the cluster
-#  serviceName: postgres
-#---
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  name: stevemongo
-#  labels:
-#    app: database
-#spec:
-#  clusterIP: None
-#  selector:
-#    app: database
-#---
-#apiVersion: apps/v1
-#kind: StatefulSet
-#metadata:
-#  name: stevemongo
-#spec:
-#  serviceName: stevemongo
-#  replicas: 1
-#  selector:
-#    matchLabels:
-#      app: database
-#  template:
-#    metadata:
-#      labels:
-#        app: database
-#        selector: stevemongo
-#    spec:
-#      containers:
-#        - name: stevemongo
-#          image: mongo:latest
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: postgresql
+  name: postgresql
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+      nodePort: 32001
+  selector:
+    app: postgresql
+  type: NodePort
+---
+
+
+apiVersion: apps/v1
+kind: StatefulSet # Kubernetes' resource kind we are creating
+metadata:
+  name: postgresql
+  namespace: default
+  labels:
+    app: postgresql
+spec:
+  selector:
+    matchLabels:
+      app: postgresql
+  replicas: 1 # Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      serviceAccountName: default # configmap-reader-account
+      containers:
+        - resources:
+            requests:
+              memory: "200Mi"
+              cpu: "200m"
+            limits:
+              memory: "400Mi"
+          name: postgresql
+          image: postgres # Image that will be used to containers in the cluster
+          env:
+            - name: POSTGRES_PASSWORD
+              value: Matthew#2007
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_DB
+              value: postgres
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432 # The port that the container is running on in the cluster
+  serviceName: postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: post-service
+  labels:
+    app: database
+spec:
+  clusterIP: None
+  selector:
+    app: database
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: post-service
+spec:
+  serviceName: post-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+        selector: post-service
+    spec:
+      containers:
+        - name: post-service
+          image: mongo:latest
 
 
 
