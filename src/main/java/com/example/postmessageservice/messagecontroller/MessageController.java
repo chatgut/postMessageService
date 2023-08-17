@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api")
-//@CrossOrigin
 public class MessageController {
 
 
@@ -38,7 +37,6 @@ public class MessageController {
                                       @RequestParam String receiversUsername,
                                       @RequestParam(defaultValue = "0") Integer page,
                                       @RequestParam(defaultValue = "5")Integer size) {
-        //                  PageRequest.of(page, size)
         Pageable pageable = PageRequest.of(page, size, Sort.by("dateAndTime").descending());
 
             return messageService.search(sendersUsername, receiversUsername, pageable);
