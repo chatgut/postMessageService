@@ -45,7 +45,7 @@ spec:
           image: postgres # Image that will be used to containers in the cluster
           env:
             - name: POSTGRES_PASSWORD
-              value: Matthew#2007
+              value: Password
             - name: POSTGRES_USER
               value: postgres
             - name: POSTGRES_DB
